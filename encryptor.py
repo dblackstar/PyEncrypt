@@ -5,6 +5,7 @@ import os.path
 from os import listdir
 from os.path import isfile, join
 import time
+import getpass
 
 class Encriptador:
 
@@ -42,47 +43,53 @@ class Encriptador:
             fo.write(dec)
         os.remove(nombreDeArchivo)
 
-key = b'[EX\xc8\xd5\xbfI{\xa2$\x05(\xd5\x18\xbf\xc0\x85)\x10nc\x94\x02)j\xdf\xcb\xc4\x94\x9d(\x9e'
-enc = Encriptador(key)
-clear = lambda: os.system('cls')
 
-if os.path.isfile('datos.txt.enc'):
-
-    while True:
-        clave = str(input("Ingresa la contraseña: "))
-        enc.decifrar_archivo("datos.txt.enc")
-        p = ''
-        with open("datos.txt", "r") as f:
-            p = f.readlines()
-        if p[0] == clave:
-            enc.encriptar_archivo("datos.txt")
-            break
+if __name__ == "__main__":
+    
+    key = b'[EX\xc8\xd5\xbfI{\xa2$\x05(\xd5\x18\xbf\xc0\x85)\x10nc\x94\x02)j\xdf\xcb\xc4\x94\x9d(\x9e'
+    enc = Encriptador(key)
+    clear = lambda: os.system('cls')
 
     while True:
-        clear()
-        opcion = int(input("1. Presiona '1' para encriptar un archivo.\n2. Presiona '2' para decifrar un archivo.\n3. Presiona '3' para salir.\n"))
-        clear()
-        if opcion == 1:
-            enc.encriptar_archivo(str(input("Ingresa el nombre o arrastra el archivo que quieras encriptar: ")))
-        elif opcion == 2:
-            enc.decifrar_archivo(str(input("Ingresa el nombre o arrastra el archivo cifrado: ")))
-        elif opcion == 3:
-            exit()
+        if os.path.isfile('key.txt.enc'):
+
+            while True:
+                clave = str(getpass.getpass("Ingresa la contraseña que se uso para el cifrado: "))
+                enc.decifrar_archivo("key.txt.enc")
+                p = ''
+                with open("key.txt", "r") as f:
+                    p = f.readlines()
+                if p[0] == clave:
+                    enc.encriptar_archivo("key.txt")
+                    break
+
+            while True:
+                clear()
+                opcion = int(input("1. Presiona '1' para encriptar un archivo.\n2. Presiona '2' para decifrar un archivo.\n3. Presiona '3' para salir.\n"))
+                clear()
+                if opcion == 1:
+                    enc.encriptar_archivo(str(input("Ingresa el nombre o arrastra el archivo que quieras encriptar: ")))
+                elif opcion == 2:
+                    enc.decifrar_archivo(str(input("Ingresa el nombre o arrastra el archivo cifrado: ")))
+                elif opcion == 3:
+                    exit()
+                else:
+                    print("Selecciona una opcion valida")
         else:
-            print("Selecciona una opcion valida")
+            while True:
+                clear()
+                clave = str(getpass.getpass("Ingresa la contraseña que se usara para el cifrado: "))
+                reclave = str(getpass.getpass("Confirma la contraseña: "))
+                if clave == reclave:
+                    f = open("key.txt", "w+")
+                    f.write(clave)
+                    f.close()
+                    enc.encriptar_archivo("key.txt")
+                    clear()
+                    print("Espera unos segundos mientras se configura...")
+                    time.sleep(3)
+                    clear()
+                    break
+                else:
+                    print("Las contraseñas no coinciden")
 
-else:
-    while True:
-        clear()
-        clave = str(input("Ingresa la contraseña que se usara para el cifrado: "))
-        reclave = str(input("Confirma la contraseña: "))
-        if clave == reclave:
-            break
-        else:
-            print("Las contraseñas no coinciden")
-    f = open("datos.txt", "w+")
-    f.write(clave)
-    f.close()
-    enc.encriptar_archivo("datos.txt")
-    print("Reinicia el programa")
-    time.sleep(10)
