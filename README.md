@@ -1,5 +1,5 @@
-# python-encryption
-Simple command line program that encrypts files using crypto
+# PyEncrypt
+Simple command line program that encrypts and decrypts files using cryptodome library
 
 <p>TODO before final version:</p>
 <ul>
@@ -7,3 +7,4 @@ Simple command line program that encrypts files using crypto
   <li>QoL changes</li>
   <li>Improve security</li>
 </ul>
+
